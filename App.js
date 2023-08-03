@@ -8,6 +8,7 @@ import GameOverSreen from "./components/screens/GameOverSreen";
 export default function App() {
   const [userNumber, setUserNamber] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
+  const [guessRounds, setGuessRounds] = useState(0);
   const pickedNumberHandler = (pickedNumber) => {
     setUserNamber(pickedNumber);
     setGameIsOver(false);
@@ -21,9 +22,19 @@ export default function App() {
       <GameScreen userNumber={userNumber} onGameOver={gameOverHandler} />
     );
   }
-
+  const startNewGameHandler = () => {
+    setUserNamber(null);
+    setGuessRounds(0);
+  };
   if (gameIsOver && userNumber) {
-    screen = <GameOverSreen onGameOver={gameOverHandler} />;
+    screen = (
+      <GameOverSreen
+        onGameOver={gameOverHandler}
+        userNumber={userNumber}
+        roundNumber={guessRounds}
+        onStartNewGame={startNewGameHandler}
+      />
+    );
   }
 
   return (

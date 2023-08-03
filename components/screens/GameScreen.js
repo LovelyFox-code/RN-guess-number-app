@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import PrimaryButton from "../ui/PrimaryButton";
 import Title from "../typography/Title";
 import NumberContainer from "../game/NumberContainer";
@@ -19,11 +19,18 @@ let maxBoundary = 100;
 export default function GameScreen({ userNumber, onGameOver }) {
   const initialGuess = generateRandomNumberBetween(1, 100, userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [guessRounds, setGuessRounds] = useState([]);
+
   useEffect(() => {
     if (currentGuess === userNumber) {
       onGameOver();
     }
   }, [currentGuess, userNumber, onGameOver]);
+
+  useEffect(() => {
+    minBoundary = 1;
+    maxBoundary = 100;
+  }, []);
   const nextGuessHandler = (direction) => {
     if (
       (direction === "lower" && currentGuess < userNumber) ||
@@ -45,6 +52,7 @@ export default function GameScreen({ userNumber, onGameOver }) {
       currentGuess
     );
     setCurrentGuess(newRndNum);
+    setGuessRounds((prevGuessRound) => [newRndNum, ...prevGuessRound]);
   };
   return (
     <Container>
@@ -53,7 +61,6 @@ export default function GameScreen({ userNumber, onGameOver }) {
         <SubTitle>your phone is in charge</SubTitle>
         <NumberContainer>{currentGuess}</NumberContainer>
       </View>
-      <View></View>
       <View style={styles.btnContainer}>
         <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
           Lower
@@ -61,6 +68,18 @@ export default function GameScreen({ userNumber, onGameOver }) {
         <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")}>
           Higher
         </PrimaryButton>
+      </View>
+      <View>
+        {/* {guessRounds.map((guessRound) => (
+          <SubTitle key={guessRound}>{guessRound}</SubTitle>
+        ))} */}
+        <FlatList
+          data={guessRounds}
+          renderItem={({ item }) => <Text>{item}</Text>}
+          keyExtractor={(item) => {
+            item;
+          }}
+        ></FlatList>
       </View>
     </Container>
   );

@@ -8,5 +8,7 @@ export default function SubTitle({ children }) {
 const styles = StyleSheet.create({
   text: {
     textAlign: "center",
+    fontSize: 18,
+    marginBottom: 24,
   },
 });
