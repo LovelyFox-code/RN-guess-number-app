@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import PrimaryButton from "../ui/PrimaryButton";
 import Title from "../typography/Title";
 import NumberContainer from "../game/NumberContainer";
 import Container from "../ui/Container";
 import SubTitle from "../typography/SubTitle";
+import GuessLogItem from "../game/GuessLogItem";
 
 const generateRandomNumberBetween = (min, max, exclude) => {
   const rndNum = Math.floor(Math.random() * (max - min)) + min;
@@ -23,7 +31,7 @@ export default function GameScreen({ userNumber, onGameOver }) {
 
   useEffect(() => {
     if (currentGuess === userNumber) {
-      onGameOver();
+      onGameOver(guessRounds.length);
     }
   }, [currentGuess, userNumber, onGameOver]);
 
@@ -54,8 +62,9 @@ export default function GameScreen({ userNumber, onGameOver }) {
     setCurrentGuess(newRndNum);
     setGuessRounds((prevGuessRound) => [newRndNum, ...prevGuessRound]);
   };
+  const guessRoundsListLength = guessRounds.length;
   return (
-    <Container>
+    <View style={styles.container}>
       <View style={styles.numberWrapper}>
         <Title>Guess</Title>
         <SubTitle>your phone is in charge</SubTitle>
@@ -73,18 +82,29 @@ export default function GameScreen({ userNumber, onGameOver }) {
         {/* {guessRounds.map((guessRound) => (
           <SubTitle key={guessRound}>{guessRound}</SubTitle>
         ))} */}
+        <SubTitle>{guessRoundsListLength} round</SubTitle>
         <FlatList
           data={guessRounds}
-          renderItem={({ item }) => <Text>{item}</Text>}
-          keyExtractor={(item) => {
-            item;
-          }}
+          renderItem={({ item }) => (
+            <>
+              <GuessLogItem guess={item} />
+            </>
+          )}
+          keyExtractor={(item, index) => item.key}
         ></FlatList>
       </View>
-    </Container>
+    </View>
   );
 }
+const deviceHeight = Dimensions.get("window").height;
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 12,
+    // justifyContent: "center",
+    marginTop: deviceHeight < 380 ? "1%" : "25%",
+    alignItems: "center",
+  },
   numberWrapper: {
     justifyContent: "",
     alignItems: "center",

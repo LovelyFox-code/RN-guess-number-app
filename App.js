@@ -4,6 +4,7 @@ import StartGameScreen from "./components/screens/StartGameScreen";
 import { useState } from "react";
 import GameScreen from "./components/screens/GameScreen";
 import GameOverSreen from "./components/screens/GameOverSreen";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [userNumber, setUserNamber] = useState();
@@ -13,8 +14,9 @@ export default function App() {
     setUserNamber(pickedNumber);
     setGameIsOver(false);
   };
-  const gameOverHandler = () => {
+  const gameOverHandler = (numberOfRounds) => {
     setGameIsOver(true);
+    setGuessRounds(numberOfRounds);
   };
   let screen = <StartGameScreen onPickNumber={pickedNumberHandler} />;
   if (userNumber) {
@@ -38,12 +40,15 @@ export default function App() {
   }
 
   return (
-    <LinearGradient
-      colors={["#9d135d", "#ff69b4", "#f987c0"]}
-      style={styles.container}
-    >
-      {screen}
-    </LinearGradient>
+    <>
+      <StatusBar style="light" />
+      <LinearGradient
+        colors={["#9d135d", "#ff69b4", "#f987c0"]}
+        style={styles.container}
+      >
+        {screen}
+      </LinearGradient>
+    </>
   );
 }
 

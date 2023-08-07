@@ -1,5 +1,12 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import Colors from "../common/Colors";
 import SubTitle from "../typography/SubTitle";
 import Title from "../typography/Title";
@@ -11,10 +18,23 @@ export default function GameOverSreen({
   userNumber,
   onStartNewGame,
 }) {
+  const { width, height } = useWindowDimensions();
+  let imageSize = 300;
+  if (width < 380) {
+    imageSize = 150;
+  }
+  if (height < 400) {
+    imageSize = 80;
+  }
+  const imageStyle = {
+    width: imageSize,
+    height: imageSize,
+    borderRadius: imageSize / 2,
+  };
   return (
     <Container>
       <Title>Game is Over</Title>
-      <View style={styles.imageContainer}>
+      <View style={[styles.imageContainer, imageStyle]}>
         <Image
           style={styles.image}
           source={require("../../assets/images/diego-ph-fIq0tET6llw-unsplash.jpg")}
@@ -29,13 +49,14 @@ export default function GameOverSreen({
     </Container>
   );
 }
+const deviceWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: "",
     alignItems: "center",
     marginBottom: 18,
-    width: 200,
-    height: 200,
+    width: deviceWidth < 380 ? 150 : 200,
+    height: deviceWidth < 380 ? 150 : 200,
     borderRadius: 200,
     borderWidth: 2,
     borderColor: Colors.primary,
